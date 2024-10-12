@@ -26,7 +26,7 @@ public class Compiler : BaseProcessor
     {
         base.Setup();
 
-        Rate = 0.5f;
+        Rate = 1f;
         Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.LastAccess;
         Watcher.EnableRaisingEvents = true;
         Watcher.Changed += (object sender, FileSystemEventArgs e) =>

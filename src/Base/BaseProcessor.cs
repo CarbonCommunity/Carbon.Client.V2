@@ -46,7 +46,6 @@ public class BaseProcessor : MonoBehaviour
 
                 try
                 {
-                    Debug.LogWarning($"Processing {process.Key}...");
                     process.Value.Do();
                 }
                 catch (Exception ex)
