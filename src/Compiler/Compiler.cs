@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Internal;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -189,6 +190,8 @@ public class Compiler : BaseProcessor
                 }
 
                 var plugin = Activator.CreateInstance(type) as BasePlugin;
+                plugin.Name = info.Title;
+                plugin.Path = filePath;
                 plugin.Load();
             }
         }

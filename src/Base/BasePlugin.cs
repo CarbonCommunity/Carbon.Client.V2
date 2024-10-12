@@ -13,13 +13,13 @@ public class BasePlugin
     {
         if (plugins.TryGetValue(Path, out var existentPlugin))
         {
-            Unload();
+            existentPlugin.Unload();
         }
+
+        Console.WriteLine($"Loaded plugin '{Name}'");
 
         plugins[Path] = this;
         OnLoad();
-
-        Console.WriteLine($"Loaded plugin '{Name}'");
     }
 
     internal void Unload()
