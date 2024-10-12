@@ -6,6 +6,6 @@ public class Entrypoint : BasePlugin
 {
     public override void Load()
     {
-        
+
     }
 }

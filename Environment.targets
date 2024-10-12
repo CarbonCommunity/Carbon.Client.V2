@@ -1,5 +1,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <RustClientRootPath>C:\Users\rauls\Documents\Software\Steam\steamapps\common\RustStaging</RustClientRootPath>
+        <CarbonRootPath>C:\Data\Repositories\raulssorban\Carbon\Release\.tmp\Debug\carbon</CarbonRootPath>
     </PropertyGroup>
 </Project>
