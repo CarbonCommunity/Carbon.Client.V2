@@ -48,12 +48,13 @@ public class BaseProcessor : MonoBehaviour
                 {
                     Debug.LogWarning($"Processing {process.Key}...");
                     process.Value.Do();
-                    process.Value.IsDirty = false;
                 }
                 catch (Exception ex)
                 {
                     Debug.LogError($"Process '{process.Key}' for {GetName()} failed ({ex.Message})\n{ex.StackTrace}");
                 }
+
+                process.Value.IsDirty = false;
             }
         }
 

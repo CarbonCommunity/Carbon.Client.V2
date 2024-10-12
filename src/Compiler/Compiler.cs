@@ -1,10 +1,14 @@
-﻿using Carbon.Extensions;
+﻿using Carbon.Base;
+using Carbon.Extensions;
+using Il2CppInterop.Runtime.Injection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -92,7 +96,31 @@ public class Compiler : BaseProcessor
 
             hasReferences = true;
 
+            ProcessDirectory("BepInEx/system");
+            ProcessDirectory("BepInEx/plugins");
+            ProcessDirectory("BepInEx/core");
+            ProcessDirectory("BepInEx/interop");
 
+            static void ProcessDirectory(string directory)
+            {
+                foreach(var file in Directory.GetFiles(directory, "*.dll"))
+                {
+                    if (file.Contains("dobby"))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        references.Add(MetadataReference.CreateFromFile(file));
+                        Debug.LogWarning($"Loaded reference: {Path.GetFileName(file)}");
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.LogError($"Failed loading reference: {file} ({ex.Message})\n{ex.StackTrace}");
+                    }
+                }
+            }
         }
 
         public void Compile()
@@ -102,15 +130,7 @@ public class Compiler : BaseProcessor
             var parseOptions = new CSharpParseOptions(LanguageVersion.Preview);
             var tree = CSharpSyntaxTree.ParseText(source, options: parseOptions);
 
-            // var root = tree.GetCompilationUnitRoot();
-            // var namespaceNodes = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>();
-            // var newRoot = root.ReplaceNodes(namespaceNodes, (original, rewritten) =>
-            // {
-            //     var originalName = original.Name.ToString();
-            //     var newName = $"{originalName}_{Guid.NewGuid():N}";
-            //     return rewritten.WithName(SyntaxFactory.ParseName(newName));
-            // });
-
+            trees.Clear();
             trees.Add(tree);
 
             var options = new CSharpCompilationOptions(
@@ -128,7 +148,7 @@ public class Compiler : BaseProcessor
             foreach (var error in emit.Diagnostics)
             {
                 var span = error.Location.GetMappedLineSpan().Span;
-
+            
                 switch (error.Severity)
                 {
                     case DiagnosticSeverity.Error:
@@ -144,25 +164,36 @@ public class Compiler : BaseProcessor
                 if (assembly != null)
                 {
                     this.assembly = Assembly.Load(assembly);
-                    Finalize();
+                    OnComplete();
                 }
                 else
                 {
-                    Failure();
+                    OnFail();
                 }
             }
             else
             {
-                Failure();
+                OnFail();
             }
         }
 
-        public void Finalize()
+        public void OnComplete()
         {
+            foreach (var type in assembly.GetTypes())
+            {
+                var info = type.GetCustomAttribute<InfoAttribute>();
 
+                if (info == null)
+                {
+                    continue;
+                }
+
+                var plugin = Activator.CreateInstance(type) as BasePlugin;
+                plugin.Load();
+            }
         }
 
-        public void Failure()
+        public void OnFail()
         {
 
         }
