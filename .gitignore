@@ -1,0 +1,41 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+*.csproj.user
+
+# Code gen
+[Bb]uild.cs
+[Gg]enerated/
+[Tt]ools/Runtime
+
+# Oxide autogen hooks
+**/Carbon.Hooks/Carbon.Hooks.Extra/src/Oxide
+
+# Project release folder
+[Rr]elease/
+
+# Rust managed files
+[Rr]ust/
+
+# msbuild stuff
+.tmp
+.gittag
+.gitauthor
+.gitbranch
+.gitchl
+.gitchs
+.gitcomment
+.gitdate
+.giturl
+.rndasm
