@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Carbon.Client.V2</RootNamespace>
     <AssemblyName>Carbon.Client.V2</AssemblyName>
-	<LangVersion>preview</LangVersion>
+    <LangVersion>preview</LangVersion>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -44,12 +44,12 @@
     <Reference Include="netstandard" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="$(CarbonRootPath)/managed/*.dll" /> 
+    <Reference Include="$(CarbonRootPath)/managed/*.dll" />
     <Reference Include="$(RustClientRootPath)/BepInEx/core/*.dll" Exclude="$(RustClientRootPath)/BepInEx/core/dobby.dll" />
     <Reference Include="$(RustClientRootPath)/BepInEx/interop/*.dll" />
   </ItemGroup>
-  <ItemGroup> 
-    <Compile Include="src\**\*.cs" />
+  <ItemGroup>
+    <Compile Include="src\**" />
     <Compile Include="Properties\*" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
