@@ -17,4 +17,20 @@ public static class UnityEx
 
         return go.AddComponent(Il2CppType.From(type)).Cast<T>();
     }
+
+    public static string GetRecursiveName(this Transform transform, string strEndName = "")
+    {
+        string text = transform.name;
+        if (!string.IsNullOrEmpty(strEndName))
+        {
+            text = text + "/" + strEndName;
+        }
+
+        if (transform.parent != null)
+        {
+            text = transform.parent.GetRecursiveName(text);
+        }
+
+        return text;
+    }
 }

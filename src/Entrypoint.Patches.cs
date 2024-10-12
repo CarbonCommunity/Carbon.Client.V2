@@ -8,7 +8,6 @@ public partial class Entrypoint
 {
 	public void MakePatch()
 	{
-
 		var patch = new Harmony("com.domain.carbon4client");
 		patch.PatchAll(typeof(Entrypoint).Assembly);
 
@@ -31,4 +30,23 @@ public partial class Entrypoint
 			Debug.Log($"CHANGED {sceneName} {mode}");
 		}
 	}
+
+    [HarmonyPatch(typeof(GameObject), nameof(GameObject.SetActive), [typeof(bool)])]
+    public class GO_SA
+    {
+        public static void Postfix(bool value, GameObject __instance)
+        {
+			if(__instance == Carbon.Rust.MenuUI.Get())
+			{
+				if(value)
+				{
+					Carbon.Rust.OnMenuShow?.Invoke();
+				}
+				else
+				{
+					Carbon.Rust.OnMenuHide?.Invoke();
+				}
+			}
+        }
+    }
 }
