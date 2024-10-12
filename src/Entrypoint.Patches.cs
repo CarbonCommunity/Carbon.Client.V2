@@ -14,7 +14,7 @@ public partial class Entrypoint
 		var methods = patch.GetPatchedMethods();
 		var methodCount = methods.Count();
 
-		foreach(var method in methods)
+		foreach (var method in methods)
 		{
 			Debug.Log($"- {method}");
 		}
@@ -31,14 +31,14 @@ public partial class Entrypoint
 		}
 	}
 
-    [HarmonyPatch(typeof(GameObject), nameof(GameObject.SetActive), [typeof(bool)])]
-    public class GO_SA
-    {
-        public static void Postfix(bool value, GameObject __instance)
-        {
-			if(__instance == Carbon.Rust.MenuUI.Get())
+	[HarmonyPatch(typeof(GameObject), nameof(GameObject.SetActive), [typeof(bool)])]
+	public class GO_SA
+	{
+		public static void Postfix(bool value, GameObject __instance)
+		{
+			if (__instance == Carbon.Rust.MenuUI.Get())
 			{
-				if(value)
+				if (value)
 				{
 					Carbon.Rust.OnMenuShow?.Invoke();
 				}
@@ -47,6 +47,6 @@ public partial class Entrypoint
 					Carbon.Rust.OnMenuHide?.Invoke();
 				}
 			}
-        }
-    }
+		}
+	}
 }
