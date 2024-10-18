@@ -28,24 +28,25 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
         MakeProcessors();
 
 		ClientNetwork.ins = new CarbonClientNetwork();
-		ClientNetwork.ins.Start();
 
 		var manager = UnityEx.SpawnGameObject("CarbonGameManager").AddUnityComponent<GameManager>();
 		manager.Init(false);
-
-		// Carbon.ClientNetworking.Init();
 
 		Carbon.Rust.OnMenuShow -= OnCarbon;
     }
 
 	public class CarbonClientNetwork : ClientNetwork
 	{
-		public override void OnData(MessageType msg, Connection conn)
+		public override void OnData(Messages msg, CarbonServer conn)
 		{
 			switch (msg)
 			{
-				case MessageType.Approval:
-					Debug.Log($"Worky");
+				case Messages.Approval:
+					Message_Approval(conn);
+					break;
+
+				case Messages.AddonLoad:
+					Message_AddonLoad(conn);
 					break;
 
 				default:

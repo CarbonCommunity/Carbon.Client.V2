@@ -83,7 +83,7 @@
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Preloader.Core.dll" />
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Unity.Common.dll" />
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Unity.IL2CPP.dll" />
-    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.Common.Client.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.Common.Client.V2.dll" />
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.Common.dll" />
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.dll" />
     <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.SDK.dll" />
@@ -129,6 +129,7 @@
     <Compile Include="src\Content\AssetProcessor.cs" />
     <Compile Include="src\Entrypoint.cs" />
     <Compile Include="src\Entrypoint.Patches.cs" />
+    <Compile Include="src\Entrypoint.Messages.cs" />
     <Compile Include="src\Entrypoint.Processors.cs" />
     <Compile Include="src\Extensions\AssetEx.cs" />
     <Compile Include="src\Extensions\CoroutineEx.cs" />
