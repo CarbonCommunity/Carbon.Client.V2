@@ -25,7 +25,6 @@
 [Rr]elease/
 
 # Rust managed files
-[Rr]ust/
 [Pp]ackages/
 
 # msbuild stuff
