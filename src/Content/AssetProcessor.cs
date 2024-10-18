@@ -4,13 +4,14 @@ public class AssetProcessor
 {
     public static readonly Shader RustStandardShader = Shader.Find("Rust/Standard");
 
-    public static void Postprocess(Transform transform)
+	public static void ProcessGameObject(GameObject go) => ProcessTransform(go.transform);
+    public static void ProcessTransform(Transform transform)
     {
         HandleRenderer(transform.GetComponent<Renderer>());
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            Postprocess(transform.GetChild(i));
+            ProcessTransform(transform.GetChild(i));
         }
     }
 
@@ -21,7 +22,7 @@ public class AssetProcessor
             return;
         }
 
-        foreach (var material in renderer.sharedMaterials)
+        foreach (var material in renderer.materials)
         {
             if (!material.HasProperty("_Mode"))
             {

@@ -29,12 +29,33 @@ public class Compiler : BaseProcessor
         Rate = 1f;
         Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.LastAccess;
         Watcher.EnableRaisingEvents = true;
-        Watcher.Changed += (object sender, FileSystemEventArgs e) =>
-        {
-            MarkDirty(e.FullPath);
-        };
+		Watcher.Created += (object sender, FileSystemEventArgs e) =>
+		{
+			var path = e.FullPath;
+			AddProcess(path, new Plugin(path));
+		};
+		Watcher.Renamed += (object sender, RenamedEventArgs e) =>
+		{
+			if(BasePlugin.plugins.TryGetValue(e.OldFullPath, out var existent))
+			{
+				existent.Unload();
+			}
 
-        Init();
+			MarkDirty(e.FullPath);
+		};
+		Watcher.Changed += (object sender, FileSystemEventArgs e) =>
+		{
+			MarkDirty(e.FullPath);
+		};
+		Watcher.Deleted += (object sender, FileSystemEventArgs e) =>
+		{
+			if (BasePlugin.plugins.TryGetValue(e.FullPath, out var existent))
+			{
+				existent.Unload();
+			}
+		};
+
+		Init();
     }
 
     public void Init()

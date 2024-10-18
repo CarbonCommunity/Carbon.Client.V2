@@ -5,6 +5,14 @@ using UnityEngine;
 
 public static class UnityEx
 {
+	public static GameObject SpawnGameObject(string name, Vector3 pos = default, Quaternion rot = default)
+	{
+		var go = new GameObject(name);
+		go.transform.SetPositionAndRotation(pos, rot);
+		UnityEngine.Object.DontDestroyOnLoad(go);
+		return go;
+	}
+
     public static T AddUnityComponent<T>(this GameObject go) where T : Component
     {
         if (go == null)

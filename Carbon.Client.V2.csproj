@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
@@ -33,6 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ben.Demystifier, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a6d206e05440431a, processorArchitecture=MSIL">
+      <HintPath>packages\Ben.Demystifier.0.4.1\lib\net45\Ben.Demystifier.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis" />
     <Reference Include="Microsoft.CodeAnalysis.CSharp" />
     <Reference Include="System" />
@@ -46,7 +54,6 @@
     <Reference Include="System.Reflection.Metadata" />
     <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe" />
@@ -62,19 +69,73 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="$(CarbonRootPath)/managed/*.dll" />
-    <Reference Include="$(RustClientRootPath)/BepInEx/core/*.dll" Exclude="$(RustClientRootPath)/BepInEx/core/dobby.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\0Harmony.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AsmResolver.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AsmResolver.DotNet.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AsmResolver.PE.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AsmResolver.PE.File.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AssetRipper.CIL.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AssetRipper.Primitives.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\AssetRipper.VersionUtilities.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Ben.Demystifier.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Core.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.IL2CPP.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Preloader.Core.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Unity.Common.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\BepInEx.Unity.IL2CPP.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.Common.Client.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.Common.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Carbon.SDK.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Cpp2IL.Core.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Disarm.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Gee.External.Capstone.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Iced.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2Cpp.TlsAdapter.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2CppDumper.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2CppInterop.Common.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2CppInterop.Generator.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2CppInterop.HarmonySupport.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Il2CppInterop.Runtime.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\IndexRange.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\LibAssemblyUnhollower.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\LibCpp2IL.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Microsoft.CodeAnalysis.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Microsoft.CodeAnalysis.Workspaces.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Mono.Cecil.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Mono.Cecil.Mdb.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Mono.Cecil.Pdb.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Mono.Cecil.Rocks.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\MonoMod.RuntimeDetour.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\MonoMod.Utils.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\Newtonsoft.Json.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\protobuf-net.Core.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\protobuf-net.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\SemanticVersioning.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\StableNameDotNet.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\System.IO.FileSystem.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\UnhollowerBaseLib.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\UnhollowerRuntimeLib.dll" />
+    <Reference Include="D:\Software\Steam\steamapps\common\Rust\BepInEx\core\WasmDisassembler.dll" />
     <Reference Include="$(RustClientRootPath)/BepInEx/interop/*.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Base\BaseProcessor.cs" />
+    <Compile Include="src\Cache\Encryption.cs" />
+    <Compile Include="src\Cache\LocalCache.cs" />
     <Compile Include="src\Compiler\Compiler.cs" />
     <Compile Include="src\Content\AssetProcessor.cs" />
     <Compile Include="src\Entrypoint.cs" />
     <Compile Include="src\Entrypoint.Patches.cs" />
     <Compile Include="src\Entrypoint.Processors.cs" />
+    <Compile Include="src\Extensions\AssetEx.cs" />
+    <Compile Include="src\Extensions\CoroutineEx.cs" />
     <Compile Include="src\Extensions\TypeEx.cs" />
     <Compile Include="src\Extensions\UnityEx.cs" />
-    <Compile Include="src\Rust.cs" />
+    <Compile Include="src\Rust\ClientNetworking.cs" />
+    <Compile Include="src\Rust\Rust.cs" />
     <Compile Include="src\Utils\GameObjectCache.cs" />
     <Compile Include="src\Base\BasePlugin.cs" />
     <Compile Include="Properties\*" />

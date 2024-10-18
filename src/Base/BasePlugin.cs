@@ -25,9 +25,17 @@ public class BasePlugin
     internal void Unload()
     {
         plugins[Path] = null;
-        OnUnload();
 
-        Console.WriteLine($"Unloaded plugin '{Name}'");
+		try
+		{
+			OnUnload();
+		}
+		catch(Exception ex)
+		{
+			Debug.LogError($"Failed unloading plugin '{Name}' ({ex.Message})\n{ex.StackTrace}");
+		}
+
+		Console.WriteLine($"Unloaded plugin '{Name}'");
     }
 
     public virtual void OnLoad()

@@ -1,26 +1,13 @@
 ﻿using BepInEx;
-using BepInEx.Unity.IL2CPP;
+using Carbon.Client;
 using UnityEngine;
 
 [BepInPlugin("c751f97e5a284fe299230f3a2f046931", "Carbon.Client", "2.0")]
 public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 {
-    public GameObject Home 
-    {
-        get
-        {
-            if(_home != null)
-            {
-                return _home;
-            }
+    public GameObject Home => _home ??= UnityEx.SpawnGameObject("Carbon4Client");
 
-            _home = new GameObject("Carbon4Client");
-            GameObject.DontDestroyOnLoad(_home);
-            return _home;
-        } 
-    }
-
-    internal GameObject _home;
+	internal GameObject _home;
 
     public override void Load()
     {
@@ -28,9 +15,10 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 
         TypeEx.RecursivelyRegisterType(typeof(System.IO.FileSystemWatcher));
         TypeEx.RecursivelyRegisterType(typeof(BaseProcessor.BaseProcess));
-        TypeEx.RecursivelyRegisterType(typeof(BaseProcessor));
+		TypeEx.RecursivelyRegisterType(typeof(BaseProcessor));
+		TypeEx.RecursivelyRegisterType(typeof(CarbonClientNetwork));
 
-        MakePatch();
+		MakePatch();
 
         Carbon.Rust.OnMenuShow += OnCarbon;
     }
@@ -39,6 +27,31 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
     {
         MakeProcessors();
 
-        Carbon.Rust.OnMenuShow -= OnCarbon;
+		ClientNetwork.ins = new CarbonClientNetwork();
+		ClientNetwork.ins.Start();
+
+		var manager = UnityEx.SpawnGameObject("CarbonGameManager").AddUnityComponent<GameManager>();
+		manager.Init(false);
+
+		// Carbon.ClientNetworking.Init();
+
+		Carbon.Rust.OnMenuShow -= OnCarbon;
     }
+
+	public class CarbonClientNetwork : ClientNetwork
+	{
+		public override void OnData(MessageType msg, Connection conn)
+		{
+			switch (msg)
+			{
+				case MessageType.Approval:
+					Debug.Log($"Worky");
+					break;
+
+				default:
+					base.OnData(msg, conn);
+					break;
+			}
+		}
+	}
 }
