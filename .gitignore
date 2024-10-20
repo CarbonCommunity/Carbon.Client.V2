@@ -15,11 +15,9 @@
 *.csproj.user
 
 # Temporary
+Environment.targets
 [Tt]mp/*
 [Ee]xt/*
-
-# Oxide autogen hooks
-**/Carbon.Hooks/Carbon.Hooks.Extra/src/Oxide
 
 # Project release folder
 [Rr]elease/
