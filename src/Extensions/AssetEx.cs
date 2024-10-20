@@ -10,11 +10,9 @@ using Carbon.Client.Extensions;
 using Carbon.Components;
 using Carbon.Extensions;
 using Il2CppInterop.Runtime;
-using ProtoBuf;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using static Carbon.Client.GameManager;
 using static Carbon.Client.RustComponent;
 

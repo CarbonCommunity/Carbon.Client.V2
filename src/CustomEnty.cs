@@ -1,5 +1,4 @@
-﻿using Carbon.Client;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CustomEnty : MonoBehaviour
 {

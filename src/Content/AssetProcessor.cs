@@ -1,5 +1,4 @@
-﻿using Carbon.Client;
-using Carbon.Client.Assets;
+﻿using Carbon.Client.Assets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

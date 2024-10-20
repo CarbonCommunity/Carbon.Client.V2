@@ -1,6 +1,4 @@
 ﻿using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes;
-using System;
 using UnityEngine;
 
 public static class UnityEx

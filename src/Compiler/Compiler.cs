@@ -1,15 +1,10 @@
-﻿using Carbon.Base;
-using Carbon.Extensions;
-using Il2CppInterop.Runtime.Injection;
+﻿using Carbon.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Internal;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 

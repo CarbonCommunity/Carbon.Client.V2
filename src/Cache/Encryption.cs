@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Carbon.Client.V2.src.Cache
+﻿namespace Carbon.Client.V2.src.Cache
 {
-	internal class Encryption
+    internal class Encryption
 	{
 	}
 }
