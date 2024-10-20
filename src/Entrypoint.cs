@@ -1,13 +1,14 @@
 ﻿using BepInEx;
 using Carbon.Client;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [BepInPlugin("c751f97e5a284fe299230f3a2f046931", "Carbon.Client", "2.0")]
 public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 {
-    public GameObject Home => _home ??= UnityEx.SpawnGameObject("Carbon4Client");
+    public static GameObject Home => _home ??= UnityEx.SpawnGameObject("Carbon4Client");
 
-	internal GameObject _home;
+	internal static GameObject _home;
 
     public override void Load()
     {
@@ -17,7 +18,9 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
         TypeEx.RecursivelyRegisterType(typeof(BaseProcessor.BaseProcess));
 		TypeEx.RecursivelyRegisterType(typeof(BaseProcessor));
 		TypeEx.RecursivelyRegisterType(typeof(CarbonClientNetwork));
-
+		TypeEx.RecursivelyRegisterType(typeof(CustomEnty));
+		TypeEx.RecursivelyRegisterType(typeof(BaseCarbonEntity));
+		
 		MakePatch();
 
         Carbon.Rust.OnMenuShow += OnCarbon;
@@ -27,17 +30,17 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
     {
         MakeProcessors();
 
+		AssetProcessor.CarbonScene = SceneManager.CreateScene("Carbon Scene", new(LocalPhysicsMode.Physics2D));
 		ClientNetwork.ins = new CarbonClientNetwork();
 
-		var manager = UnityEx.SpawnGameObject("CarbonGameManager").AddUnityComponent<GameManager>();
-		manager.Init(false);
+		UnityEx.SpawnGameObject("CarbonGameManager").AddUnityComponent<GameManager>().Init(false);
 
 		Carbon.Rust.OnMenuShow -= OnCarbon;
     }
 
 	public class CarbonClientNetwork : ClientNetwork
 	{
-		public override void OnData(Messages msg, CarbonServer conn)
+		public override void OnData(Messages msg, CarbonServerConnection conn)
 		{
 			switch (msg)
 			{
@@ -45,8 +48,28 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 					Message_Approval(conn);
 					break;
 
-				case Messages.AddonLoad:
+				case Messages.AddonsLoading:
 					Message_AddonLoad(conn);
+					break;
+
+				case Messages.PlayerLoad:
+					Message_PlayerLoad(conn);
+					break;
+
+				case Messages.EntityCreate:
+					Message_EntityCreate(conn);
+					break;
+
+				case Messages.EntityUpdate:
+					Message_EntityUpdate(conn);
+					break;
+
+				case Messages.EntityPosition:
+					Message_EntityPosition(conn);
+					break;
+
+				case Messages.EntityDestroy:
+					Message_EntityDestroy(conn);
 					break;
 
 				default:

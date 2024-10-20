@@ -6,11 +6,17 @@ using System.Linq;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using Carbon.Client;
 using Carbon.Client.Assets;
+using Carbon.Client.Extensions;
 using Carbon.Components;
 using Carbon.Extensions;
+using Il2CppInterop.Runtime;
+using ProtoBuf;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+using static Carbon.Client.GameManager;
+using static Carbon.Client.RustComponent;
 
 public static class AssetEx
 {
@@ -118,14 +124,14 @@ public static class AssetEx
 		foreach (var prefab in prefabs)
 		{
 			var lookup = Carbon.Rust.FindPrefab(prefab.rustPath);
+			var entity = lookup?.GetComponent<BaseEntity>();
+			Debug.Log($"Looking to create {prefab.rustPath} |{lookup}|{entity}|{prefab.entity.enforcePrefab}");
 
 			if (lookup == null)
 			{
 				Debug.LogWarning($"Couldn't find '{prefab.rustPath}' as the asset provided is null.");
 				continue;
 			}
-
-			var entity = lookup.GetComponent<BaseEntity>();
 
 			if (entity && !prefab.entity.enforcePrefab)
 			{
@@ -156,9 +162,83 @@ public static class AssetEx
 		var result = (GameObject)null;
 
 		yield return result = UnityEngine.Object.Instantiate(gameObject);
+		//SceneManager.MoveGameObjectToScene(result, AssetProcessor.CarbonScene);
 		AddonManager.Instance.CreatedPrefabs.Add(result);
 
 		callback?.Invoke(result);
+	}
+
+	public static void Client_PreApplyComponent(RustComponent component, GameObject go)
+	{
+		if (!component.Component.CreateOn.Client || component.Client == RustComponent.PostProcessMode.Destroyed || component._instance != null)
+		{
+			return;
+		}
+
+		var type = ClientAccessToolsEx.TypeByName(component.Component.Type);
+		var il2cppType = Il2CppType.From(type);
+		var componentInstance = go.AddComponent(il2cppType);
+		component._instance = componentInstance;
+
+		const Il2CppSystem.Reflection.BindingFlags _monoFlags = Il2CppSystem.Reflection.BindingFlags.Instance | Il2CppSystem.Reflection.BindingFlags.Public;
+
+		if (component.Component.Members != null && component.Component.Members.Length > 0)
+		{
+			foreach (var member in component.Component.Members)
+			{
+				var field = il2cppType.GetField(member.Name, _monoFlags);
+
+				if (field == null)
+				{
+					Debug.LogWarning($" Couldn't find member '{member.Name}' in {type}");
+					continue;
+				}
+
+				var memberType = field.FieldType;
+				var value = (object)null;
+
+				try
+				{
+					if (memberType.Name == "LayerMask")
+					{
+						field.SetValue(componentInstance, new LayerMask { value = int.Parse(member.Value) }.BoxIl2CppObject());
+					}
+					else if (memberType.Name == "Vector2")
+					{
+						using var temp = TempArray<string>.New(member.Value.Split(','));
+						field.SetValue(componentInstance, new Vector2(temp.Get(0, "0").ToFloat(), temp.Get(1, "0").ToFloat()).BoxIl2CppObject());
+					}
+					else if (memberType.Name == "Vector3")
+					{
+						using var temp = TempArray<string>.New(member.Value.Split(','));
+						field.SetValue(componentInstance, new Vector3(temp.Get(0, "0").ToFloat(), temp.Get(1, "0").ToFloat(), temp.Get(2, "0").ToFloat()).BoxIl2CppObject());
+					}
+					else if (memberType.IsEnum)
+					{
+						value = Il2CppSystem.Enum.Parse(memberType, member.Value);
+						field.SetValue(componentInstance, (Il2CppSystem.Object)value);
+					}
+					else
+					{
+						value = Il2CppSystem.Convert.ChangeType(member.Value, memberType);
+						field.SetValue(componentInstance, (Il2CppSystem.Object)value);
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.LogWarning($" Failed assigning member '{member.Name}' ({member.Value}) of type {memberType} ({ex.Message})\n{ex.StackTrace}");
+				}
+			}
+		}
+	}
+	public static bool Client_PreApplyObject(RustComponent component, GameObject go)
+	{
+		if (!HandleDisabled(component, go))
+		{
+			return !HandleDestroy(component, go);
+		}
+
+		return true;
 	}
 
 	public static IEnumerator DownloadAddonsAsync(string[] urls, bool load = true)
@@ -237,6 +317,9 @@ public static class AssetEx
 			yield return CoroutineEx.waitForEndOfFrame;
 		}
 
+		ClientNetwork.ins.serverConnection.Write.Start(Messages.AddonsLoaded);
+		ClientNetwork.ins.serverConnection.Write.Send();
+
 		yield return CreateScene();
 
 		Debug.Log($"Finished loading addons!");
@@ -285,9 +368,6 @@ public static class AssetEx
 
 	public static IEnumerator CreateScene()
 	{
-		var total = AddonManager.Instance.LoadedAddons.Where(x => x.Value.ScenePrefabs != null).Sum(x => x.Value.ScenePrefabs.Length);
-		var current = 0;
-
 		foreach (var addon in AddonManager.Instance.LoadedAddons)
 		{
 			if (addon.Value.ScenePrefabs == null)
@@ -301,12 +381,9 @@ public static class AssetEx
 				{
 					if (prefab != null)
 					{
-						// prefab.Client_ProcessPostPrefab();
 						prefab.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 						prefab.transform.localScale = Vector3.one;
 					}
-
-					current++;
 				});
 
 				yield return CoroutineEx.waitForEndOfFrame;
@@ -344,9 +421,11 @@ public static class AssetEx
 			}
 
 			AddonManager.CachePrefab prefab = default;
+			prefab.Path = modifiedName;
 			prefab.Object = asset.cachedBundle.LoadAsset<GameObject>(name);
 
-			AssetProcessor.ProcessGameObject(prefab.Object);
+			RegisterSpawnablePrefab(modifiedName, prefab.Object);
+			AssetProcessor.ProcessGameObject(prefab.Object, asset);
 
 			if (asset.cachedRustBundle.rustPrefabs != null &&
 				asset.cachedRustBundle.rustPrefabs.TryGetValue(modifiedName, out var prefabs))
@@ -356,5 +435,49 @@ public static class AssetEx
 
 			AddonManager.Instance.Prefabs.Add(modifiedName, prefab);
 		}
+	}
+
+	public static void RegisterSpawnablePrefab(string assetPath, GameObject gameObject)
+	{
+		try
+		{
+			if (gameObject == null)
+			{
+				return;
+			}
+
+			if (gameObject.GetComponent<BaseCarbonEntity>() == null)
+			{
+				return;
+			}
+
+			var info = new PrefabInfo(assetPath, gameObject);
+			ins.spawnablePrefabs[info.assetId] = info;
+		}
+		catch (Exception ex)
+		{
+			Debug.LogError($"{assetPath} ({ex.Message})\n{ex.StackTrace}");
+		}
+	}
+
+	public static bool HandleDisabled(RustComponent component, GameObject go)
+	{
+		if (component.Client != PostProcessMode.Disabled)
+		{
+			return false;
+		}
+
+		go.SetActive(false);
+		return true;
+	}
+	public static bool HandleDestroy(RustComponent component, GameObject go)
+	{
+		if (component.Client != PostProcessMode.Destroyed)
+		{
+			return false;
+		}
+
+		UnityEngine.Object.Destroy(go);
+		return true;
 	}
 }

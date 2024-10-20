@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using EasyRoads3Dv3;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Carbon;
 
@@ -9,15 +9,16 @@ public class Rust
 {
 	public static Dictionary<string, GameObject> prefabs = new();
 
-    public static GameObjectCache MenuUI = new("MenuUI(Clone)");
-    public static GameObjectCache EngineUI = new("EngineUI(Clone)");
+	public static GameObjectCache LocalPlayer = new("LocalPlayer");
+	public static GameObjectCache MenuUI = new("MenuUI(Clone)");
+	public static GameObjectCache EngineUI = new("EngineUI(Clone)");
 
-    public static Action OnMenuShow;
-    public static Action OnMenuHide;
+	public static Action OnMenuShow;
+	public static Action OnMenuHide;
 
 	public static GameObject FindPrefab(string name)
 	{
-		if(prefabs.TryGetValue(name, out var prefab))
+		if (prefabs.TryGetValue(name, out var prefab))
 		{
 			return prefab;
 		}
@@ -26,12 +27,16 @@ public class Rust
 
 		foreach (var bundle in bundles)
 		{
+			if (bundle.isStreamedSceneAssetBundle)
+			{
+				continue;
+			}
+
 			var asset = bundle.LoadAsset<GameObject>(name);
 
 			if (asset != null)
 			{
-				prefabs[name] = asset;
-				return asset;
+				return prefabs[name] = asset;
 			}
 		}
 
@@ -41,15 +46,16 @@ public class Rust
 	{
 		var source = FindPrefab(name);
 
-		if(source == null)
+		if (source == null)
 		{
 			return null;
 		}
 
-		var instance = GameObject.Instantiate(source);
+		var instance = UnityEngine.Object.Instantiate(source);
 		instance.transform.SetPositionAndRotation(pos, rot);
+		// SceneManager.MoveGameObjectToScene(instance, AssetProcessor.CarbonScene);
 
-		if(scale != default)
+		if (scale != default)
 		{
 			instance.transform.localScale = scale;
 		}

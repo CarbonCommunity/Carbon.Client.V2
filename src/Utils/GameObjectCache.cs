@@ -23,3 +23,22 @@ public struct GameObjectCache
         return new GameObjectCache(key, GameObject.Find(key));
     }
 }
+
+public struct LocalPlayerCache
+{
+	public BasePlayer player;
+	public PlayerEyes eyes;
+	public Camera camera;
+
+	public BasePlayer Get()
+	{
+		if (player == null)
+		{
+			player ??= Carbon.Rust.LocalPlayer.Get()?.GetComponent<BasePlayer>();
+			eyes = player.GetComponent<PlayerEyes>();
+			camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+		}
+
+		return player;
+	}
+}

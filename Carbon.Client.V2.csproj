@@ -127,11 +127,14 @@
     <Compile Include="src\Cache\LocalCache.cs" />
     <Compile Include="src\Compiler\Compiler.cs" />
     <Compile Include="src\Content\AssetProcessor.cs" />
+    <Compile Include="src\CustomEnty.cs" />
+    <Compile Include="src\Entity\LocalCarbonPlayer.cs" />
     <Compile Include="src\Entrypoint.cs" />
     <Compile Include="src\Entrypoint.Patches.cs" />
     <Compile Include="src\Entrypoint.Messages.cs" />
     <Compile Include="src\Entrypoint.Processors.cs" />
     <Compile Include="src\Extensions\AssetEx.cs" />
+    <Compile Include="src\Extensions\ClientAccessToolsEx.cs" />
     <Compile Include="src\Extensions\CoroutineEx.cs" />
     <Compile Include="src\Extensions\TypeEx.cs" />
     <Compile Include="src\Extensions\UnityEx.cs" />
