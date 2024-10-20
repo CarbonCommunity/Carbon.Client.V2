@@ -11,32 +11,32 @@ public static class UnityEx
 		return go;
 	}
 
-    public static T AddUnityComponent<T>(this GameObject go) where T : Component
-    {
-        if (go == null)
-        {
-            return null;
-        }
+	public static T AddUnityComponent<T>(this GameObject go) where T : Component
+	{
+		if (go == null)
+		{
+			return null;
+		}
 
-        var type = typeof(T);
-        type.RecursivelyRegisterType();
+		var type = typeof(T);
+		type.RecursivelyRegisterType();
 
-        return go.AddComponent(Il2CppType.From(type)).Cast<T>();
-    }
+		return go.AddComponent(Il2CppType.From(type)).Cast<T>();
+	}
 
-    public static string GetRecursiveName(this Transform transform, string strEndName = "")
-    {
-        string text = transform.name;
-        if (!string.IsNullOrEmpty(strEndName))
-        {
-            text = text + "/" + strEndName;
-        }
+	public static string GetRecursiveName(this Transform transform, string strEndName = "")
+	{
+		string text = transform.name;
+		if (!string.IsNullOrEmpty(strEndName))
+		{
+			text = text + "/" + strEndName;
+		}
 
-        if (transform.parent != null)
-        {
-            text = transform.parent.GetRecursiveName(text);
-        }
+		if (transform.parent != null)
+		{
+			text = transform.parent.GetRecursiveName(text);
+		}
 
-        return text;
-    }
+		return text;
+	}
 }

@@ -8,7 +8,7 @@ public static class CoroutineEx
 	public static WaitForEndOfFrame waitForEndOfFrame = new();
 	public static WaitForSeconds waitForSeconds(float seconds)
 	{
-		if(waitForSecondsCache.TryGetValue(seconds, out var cache))
+		if (waitForSecondsCache.TryGetValue(seconds, out var cache))
 		{
 			return cache;
 		}

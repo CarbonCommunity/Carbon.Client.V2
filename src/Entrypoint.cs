@@ -6,29 +6,29 @@ using UnityEngine.SceneManagement;
 [BepInPlugin("c751f97e5a284fe299230f3a2f046931", "Carbon.Client", "2.0")]
 public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 {
-    public static GameObject Home => _home ??= UnityEx.SpawnGameObject("Carbon4Client");
+	public static GameObject Home => _home ??= UnityEx.SpawnGameObject("Carbon4Client");
 
 	internal static GameObject _home;
 
-    public override void Load()
-    {
-        Debug.Log($"Launching Carbon 4 Client...");
+	public override void Load()
+	{
+		Debug.Log($"Launching Carbon 4 Client...");
 
-        TypeEx.RecursivelyRegisterType(typeof(System.IO.FileSystemWatcher));
-        TypeEx.RecursivelyRegisterType(typeof(BaseProcessor.BaseProcess));
+		TypeEx.RecursivelyRegisterType(typeof(System.IO.FileSystemWatcher));
+		TypeEx.RecursivelyRegisterType(typeof(BaseProcessor.BaseProcess));
 		TypeEx.RecursivelyRegisterType(typeof(BaseProcessor));
 		TypeEx.RecursivelyRegisterType(typeof(CarbonClientNetwork));
 		TypeEx.RecursivelyRegisterType(typeof(CustomEnty));
 		TypeEx.RecursivelyRegisterType(typeof(BaseCarbonEntity));
-		
+
 		MakePatch();
 
-        Carbon.Rust.OnMenuShow += OnCarbon;
-    }
+		Carbon.Rust.OnMenuShow += OnCarbon;
+	}
 
-    public void OnCarbon()
-    {
-        MakeProcessors();
+	public void OnCarbon()
+	{
+		MakeProcessors();
 
 		AssetProcessor.CarbonScene = SceneManager.CreateScene("Carbon Scene", new(LocalPhysicsMode.Physics2D));
 		ClientNetwork.ins = new CarbonClientNetwork();
@@ -36,7 +36,7 @@ public partial class Entrypoint : BepInEx.Unity.IL2CPP.BasePlugin
 		UnityEx.SpawnGameObject("CarbonGameManager").AddUnityComponent<GameManager>().Init(false);
 
 		Carbon.Rust.OnMenuShow -= OnCarbon;
-    }
+	}
 
 	public class CarbonClientNetwork : ClientNetwork
 	{

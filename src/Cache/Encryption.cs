@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Client.V2.src.Cache
 {
-    internal class Encryption
+	internal class Encryption
 	{
 	}
 }
