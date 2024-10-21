@@ -1,107 +1,122 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="Environment.targets" />
+<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build">
+<Import Project="Environment.targets" />
+	<PropertyGroup>
+		<Product>Carbon.Client.V2</Product>
+		<Title>C4C</Title>
+		<OutputType>Library</OutputType>
+		<Configurations>Debug;Release</Configurations>
+		<LangVersion>preview</LangVersion>
+		<TargetFramework>net48</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<Version>2.0.0</Version>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+  
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B8E881E-3AAC-4D62-82A4-A0E2357544D2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Carbon.Client.V2</RootNamespace>
-    <AssemblyName>Carbon.Client.V2</AssemblyName>
-    <LangVersion>preview</LangVersion>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>embedded</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">x64</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Ben.Demystifier, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a6d206e05440431a, processorArchitecture=MSIL">
-      <HintPath>packages\Ben.Demystifier.0.4.1\lib\net45\Ben.Demystifier.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Linq">
+      <Private>false</Private>
     </Reference>
-    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
-      <HintPath>packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    <Reference Include="System.Core">
+      <Private>false</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis" />
-    <Reference Include="Microsoft.CodeAnalysis.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Buffers" />
-    <Reference Include="System.Collections.Immutable" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Memory" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
-    <Reference Include="System.Reflection.Metadata" />
-    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Data">
+      <Private>false</Private>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe" />
-    <Reference Include="System.Text.Encoding.CodePages" />
-    <Reference Include="System.Threading.Tasks.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="netstandard" />
+    <Reference Include="System.Runtime">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Memory">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.IO">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Watcher">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Primitives">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Globalization">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Management">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xml.Serialization">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Console">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="netstandard">
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="$(CarbonRootPath)\managed\*.dll" />
-    <Reference Include="$(RustClientRootPath)\BepInEx\core\*.dll" />
-    <Reference Include="$(RustClientRootPath)\BepInEx\interop\*.dll" />
+    <Reference Include="$(CarbonRootPath)\managed\*.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="$(RustClientRootPath)\BepInEx\core\*.dll" Exclude="$(RustClientRootPath)\BepInEx\core\Carbon*.dll;$(RustClientRootPath)\BepInEx\core\dobby.dll;$(RustClientRootPath)\BepInEx\core\Microsoft*.dll;$(RustClientRootPath)\BepInEx\core\Ben*.dll;$(RustClientRootPath)\BepInEx\core\System*.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="$(RustClientRootPath)\BepInEx\interop\*.dll" Exclude="$(RustClientRootPath)\BepInEx\interop\Newtonsoft.Json.dll">
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="src\Base\BaseProcessor.cs" />
-    <Compile Include="src\Cache\Encryption.cs" />
-    <Compile Include="src\Cache\LocalCache.cs" />
-    <Compile Include="src\Compiler\Compiler.cs" />
-    <Compile Include="src\Content\AssetProcessor.cs" />
-    <Compile Include="src\CustomEnty.cs" />
-    <Compile Include="src\Entity\LocalCarbonPlayer.cs" />
-    <Compile Include="src\Entrypoint.cs" />
-    <Compile Include="src\Entrypoint.Patches.cs" />
-    <Compile Include="src\Entrypoint.Messages.cs" />
-    <Compile Include="src\Entrypoint.Processors.cs" />
-    <Compile Include="src\Extensions\AssetEx.cs" />
-    <Compile Include="src\Extensions\ClientAccessToolsEx.cs" />
-    <Compile Include="src\Extensions\CoroutineEx.cs" />
-    <Compile Include="src\Extensions\TypeEx.cs" />
-    <Compile Include="src\Extensions\UnityEx.cs" />
-    <Compile Include="src\Rust\ClientNetworking.cs" />
-    <Compile Include="src\Rust\Rust.cs" />
-    <Compile Include="src\Utils\GameObjectCache.cs" />
-    <Compile Include="src\Base\BasePlugin.cs" />
-    <Compile Include="Properties\*" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="*" />
+    <PackageReference Include="Ben.Demystifier" Version="*" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="*" />
+    <PackageReference Include="Microsoft.CSharp" Version="*" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
+    <PackageReference Update="Microsoft.Unity.Analyzers" Version="1.19.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <Compile Include="src/**/*.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  
+	<ItemGroup>
+		<Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+		<Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+	</ItemGroup>
+
 </Project>
